@@ -2,6 +2,7 @@ export class SafeProp {
   public val: any;
   public returnEmptyType: string;
   public mode: string;
+  private logEnabled = true;
   constructor(mode?: string, returnEmptyType?: string) {
     switch(mode) {
       case 'safe':
@@ -23,8 +24,8 @@ export class SafeProp {
 
   // wrap the object
   public set(obj: object) {
-    // this.obj = obj;
     this.val = obj;
+    this.logEnabled = true;
     return this;
   }
 
@@ -42,8 +43,9 @@ export class SafeProp {
       if (this.mode === 'strict') {
         throw new Error(errorMsg);
       }
-      if (this.mode === 'safe') {
+      if (this.mode === 'safe' && this.logEnabled) {
         console.error(errorMsg);
+        this.logEnabled = false;
       }
       return this;
     }
@@ -55,6 +57,7 @@ export class SafeProp {
   // eg. 'request.body.message'
   public get(propChain: string) {
     const propArr = propChain.split('.');
+    this.logEnabled = true;
     for (const prop of propArr) {
       this.f(prop);
     }

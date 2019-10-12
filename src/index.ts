@@ -5,7 +5,7 @@ export class SafeProp {
   private logEnabled = true;
   constructor(mode?: string, returnEmptyType?: string) {
     switch(mode) {
-      case 'safe':
+      case 'log':
       case 'strict':
         this.mode = mode;
         break;
@@ -43,7 +43,7 @@ export class SafeProp {
       if (this.mode === 'strict') {
         throw new Error(errorMsg);
       }
-      if (this.mode === 'safe' && this.logEnabled) {
+      if (this.mode === 'log' && this.logEnabled) {
         console.error(errorMsg);
         this.logEnabled = false;
       }

@@ -61,7 +61,7 @@ test('Default mode, generic return type', () => {
   expect(sp.set(null).get('e.c.d').val === null);
 });
 
-test('Safe mode: valid property', () => {
+test('log mode: valid property', () => {
   const testObj = {
     a: {
       b: {
@@ -71,18 +71,18 @@ test('Safe mode: valid property', () => {
       }
     }
   }
-  const sp = new SafeProp('safe');
+  const sp = new SafeProp('log');
   expect(sp.set(testObj).f('a').f('b').f('c').f('d').val === 'apple');
   expect(sp.set(testObj).get('a.b.c.d').val === 'apple');
 });
 
-test('Safe mode: try access prop of undefined', () => {
+test('log mode: try access prop of undefined', () => {
   const testObj = {
     a: undefined
   }
   const restoreConsole = mockConsole();
-  const sp = new SafeProp('safe');
-  expect(sp.set(testObj).f('a').f('b').f('c').f('d').val === undefined);
+  const sp = new SafeProp('log');
+  expect(sp.set(testObj).get('a.b.c.d').val === undefined);
   expect(sp.set(null).f('a').f('b').f('c').f('d').val === null);
   expect(console.error).toHaveBeenCalled();
   restoreConsole();

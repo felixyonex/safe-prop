@@ -3,6 +3,7 @@ export class SafeProp {
   public returnEmptyType: string;
   public mode: string;
   private logEnabled = true;
+
   constructor(mode?: string, returnEmptyType?: string) {
     switch(mode) {
       case 'log':
@@ -22,15 +23,25 @@ export class SafeProp {
     }
   }
 
+  private handleError(errMsg: string) {
+    if (this.mode === 'strict') {
+      throw new Error(errMsg);
+    }
+    if (this.mode === 'log' && this.logEnabled) {
+      console.error(errMsg);
+      this.logEnabled = false;
+    }
+  }
+
   // wrap the object
-  public set(obj: object) {
+  public set(obj: object | Array<any>) {
     this.val = obj;
     this.logEnabled = true;
     return this;
   }
 
   // fetch the value from property name
-  public f(prop: string) {
+  public f(prop: string | number) {
     if (this.val === undefined || this.val === null) {
       const emptyType = this.val === undefined ? 'undefined' : 'null';
       const errorMsg = `safeProp Error: Cannot read property ${prop} of ${emptyType}!`;
@@ -40,13 +51,7 @@ export class SafeProp {
         this.returnEmptyType === 'null' ? null :
           this.val;
 
-      if (this.mode === 'strict') {
-        throw new Error(errorMsg);
-      }
-      if (this.mode === 'log' && this.logEnabled) {
-        console.error(errorMsg);
-        this.logEnabled = false;
-      }
+      this.handleError(errorMsg);
       return this;
     }
     this.val = this.val[prop];
@@ -54,10 +59,21 @@ export class SafeProp {
   }
 
   // fetch value from a chain of properties
-  // eg. 'request.body.message'
-  public get(propChain: string) {
-    const propArr = propChain.split('.');
+  // eg. 'request.body.message[0].title'
+  public get(propChain: any) {
     this.logEnabled = true;
+    if (propChain === undefined || propChain === '' || typeof propChain !== 'string' || propChain === null ) {
+      this.handleError('SafeProp: Invalid input!')
+      return this;
+    }
+
+    const propArr = propChain.match(/\w+/g);
+
+    if (!(propArr && propArr.length)) {
+      this.handleError('SafeProp: Invalid input!')
+      return this;
+    }
+
     for (const prop of propArr) {
       this.f(prop);
     }

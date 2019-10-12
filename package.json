@@ -1,10 +1,11 @@
 {
   "name": "safe-prop",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "safeProp",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "ts-node-dev --inspect=9229 src/server.ts",
+    "build": "tsc",
     "test": "npm run jest",
     "test-w": "npm run jest -- --watchAll",
     "test:e2e": "jest --runInBand e2e_tests/*.test.ts",
@@ -32,5 +33,12 @@
       "json",
       "node"
     ]
-  }
+  },
+  "dependencies": {},
+  "keywords": [
+    "safe-prop",
+    "safeProp",
+    "object",
+    "property"
+  ]
 }

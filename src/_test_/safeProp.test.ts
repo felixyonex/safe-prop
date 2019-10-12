@@ -6,7 +6,7 @@ test('Default mode, default return type', () => {
     a: {
       b: {
         c: {
-          d: 'apple',
+          d: ['apple'],
         }
       }
     },
@@ -14,8 +14,11 @@ test('Default mode, default return type', () => {
     f: undefined,
   };
   const sp = new SafeProp();
-  expect(sp.set(testObj).f('a').f('b').f('c').f('d').val === 'apple');
-  expect(sp.set(testObj).get('a.b.c.d').val === 'apple');
+  expect(sp.set(testObj).f('a').f('b').f('c').f('d').f(0).val === 'apple');
+  expect(sp.set(testObj).get('a.b.c.d[0]').val === 'apple');
+  expect(() => sp.set(testObj).get('').get('') === undefined);
+  expect(sp.set(testObj).get('a.b.c.d.0').val === 'apple');
+  expect(sp.set(testObj).get('a.b.c.d[1]').val === undefined);
   expect(sp.set(testObj).get('b.c.d').val === undefined);
   expect(sp.set(testObj).get('e').val === null);
   expect(sp.set(testObj).get('f').val === undefined);
@@ -37,8 +40,6 @@ test('Default mode, null return type', () => {
   expect(sp.set(testObj).get('a.b.c.d').val === 'apple');
   expect(sp.set(testObj).get('b.c.d').val === null);
   expect(sp.set(testObj).get('e.c.d').val === null);
-  expect(sp.set(undefined).get('e.c.d').val === null);
-  expect(sp.set(null).get('e.c.d').val === null);
 });
 
 test('Default mode, generic return type', () => {
@@ -56,9 +57,7 @@ test('Default mode, generic return type', () => {
   expect(sp.set(testObj).f('a').f('b').f('c').f('d').val === 'apple');
   expect(sp.set(testObj).get('a.b.c.d').val === 'apple');
   expect(sp.set(testObj).get('b.c.d').val === undefined);
-  expect(sp.set(undefined).get('b.c.d').val === undefined);
   expect(sp.set(testObj).get('e.c.d').val === null);
-  expect(sp.set(null).get('e.c.d').val === null);
 });
 
 test('log mode: valid property', () => {
@@ -78,13 +77,15 @@ test('log mode: valid property', () => {
 
 test('log mode: try access prop of undefined', () => {
   const testObj = {
-    a: undefined
+    a: undefined,
+    b: null,
   }
   const restoreConsole = mockConsole();
   const sp = new SafeProp('log');
   expect(sp.set(testObj).get('a.b.c.d').val === undefined);
-  expect(sp.set(null).f('a').f('b').f('c').f('d').val === null);
-  expect(console.error).toHaveBeenCalled();
+  expect(sp.set(testObj).f('b').f('b').f('c').f('d').val === null);
+  expect(sp.set(testObj).get('') === undefined);
+  expect(sp.set(testObj).get('...') === undefined);
   restoreConsole();
 });
 
@@ -93,7 +94,7 @@ test('Strict mode: try access prop of undefined', () => {
     a: undefined
   }
   const sp = new SafeProp('strict');
-  expect(() => {sp.set(undefined).f('a')}).toThrowError('safeProp Error: Cannot read property a of undefined!')
+  expect(() => {sp.set(testObj).get('b.a')}).toThrowError('safeProp Error: Cannot read property a of undefined!')
   expect(() => {sp.set(testObj).f('a').f('b').f('c').f('d')}).toThrowError('safeProp Error: Cannot read property b of undefined!');
   expect(() => {sp.set(testObj).get('a.b.c.d')}).toThrowError('safeProp Error: Cannot read property b of undefined!');
 })
@@ -103,7 +104,8 @@ test('Strict mode: try access prop of null', () => {
     a: null
   }
   const sp = new SafeProp('strict');
-  expect(() => {sp.set(null).f('a')}).toThrowError('safeProp Error: Cannot read property a of null!')
+  expect(() => {sp.set(testObj).f('a').f('a')}).toThrowError('safeProp Error: Cannot read property a of null!')
   expect(() => {sp.set(testObj).f('a').f('b').f('c').f('d')}).toThrowError('safeProp Error: Cannot read property b of null!');
   expect(() => {sp.set(testObj).get('a.b.c.d')}).toThrowError('safeProp Error: Cannot read property b of null!');
+  expect(() => {sp.set(testObj).get('')}).toThrowError('SafeProp: Invalid input!');
 })

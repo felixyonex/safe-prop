@@ -1,4 +1,4 @@
-# safe-prop
+# safe-prop-getter
 
 an npm package to safely access the properties
 
@@ -56,7 +56,7 @@ if (request && request.body && request.body.event &&
 }
 ```
 
-with safe-prop, you can simplify your property check like this
+with safe-prop-getter, you can simplify your property check like this
 
 ```js
 const sp = new SafeProp();
@@ -67,10 +67,10 @@ if (sp.set(request).get('body.event.data.new.id').val) {
 }
 ```
 
-## install (not ready yet)
+## install
 
 ```bash
-npm install safe-prop
+npm install safe-prop-getter
 ```
 
 ## usage
@@ -78,7 +78,7 @@ npm install safe-prop
 ### basic
 
 ```ts
-import { SafeProp } from "safe-prop";
+import { SafeProp } from "safe-prop-getter";
 
 const testObj = {
   response: {

@@ -1,6 +1,6 @@
 {
-  "name": "safe-prop",
-  "version": "1.0.0",
+  "name": "safe-prop-getter",
+  "version": "1.0.2",
   "description": "safeProp",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,6 +13,14 @@
   },
   "author": "Felix Wu",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/felixyonex/safe-prop-getter/issues"
+  },
+  "homepage": "https://github.com/felixyonex/safe-prop-getter",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:felixyonex/safe-prop-getter.git"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.18",
     "jest": "^24.9.0",
@@ -36,8 +44,11 @@
   },
   "dependencies": {},
   "keywords": [
+    "safe-prop-getter",
     "safe-prop",
-    "safeProp",
+    "safePropGetter",
+    "safe",
+    "prop",
     "object",
     "property"
   ]

@@ -1,0 +1,35 @@
+{
+  "name": "safe-prop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --inspect=9229 src/server.ts",
+    "test": "npm run jest",
+    "test-w": "npm run jest -- --watchAll",
+    "test:e2e": "jest --runInBand e2e_tests/*.test.ts",
+    "jest": "jest --coverage"
+  },
+  "author": "Felix Wu",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
+    "ts-node-dev": "^1.0.0-pre.43",
+    "typescript": "^3.6.4"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testEnvironment": "node",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.ts$",
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "json",
+      "node"
+    ]
+  }
+}

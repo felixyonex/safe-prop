@@ -62,7 +62,8 @@ export class SafeProp {
   // eg. 'request.body.message[0].title'
   public get(propChain: any) {
     this.logEnabled = true;
-    if (propChain === undefined || propChain === '' || typeof propChain !== 'string' || propChain === null ) {
+    if (propChain === undefined || typeof propChain !== 'string' || propChain === null ) {
+      this.val = undefined;
       this.handleError('SafeProp: Invalid input!')
       return this;
     }
@@ -70,6 +71,7 @@ export class SafeProp {
     const propArr = propChain.match(/\w+/g);
 
     if (!(propArr && propArr.length)) {
+      this.val = undefined;
       this.handleError('SafeProp: Invalid input!')
       return this;
     }
